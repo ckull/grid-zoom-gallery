@@ -160,7 +160,8 @@ const Home = () => {
   let backBtnRef = useRef()
   let miniGridRef = useRef()
   let miniGridImagesRef = useRef([])
-  let bodyEl = document.querySelector('body')
+  let bodyEl;
+  
 
   useLayoutEffect(() => {
     init()
@@ -169,6 +170,10 @@ const Home = () => {
   useEffect(() => {
     handleWinSize()
 
+    if (typeof window !== `undefined`) { // or typeof document !== 'undefined'
+      bodyEl = document?.querySelector('body')
+    }
+    
     wrapTextLinesReveal(contentRef.current)
     window.addEventListener("resize", handleWinSize)
 

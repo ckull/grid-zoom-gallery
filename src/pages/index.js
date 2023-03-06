@@ -1,18 +1,11 @@
-import React, { useEffect } from "react"
-
+import React from 'react'
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 import Home from "../containers/Home"
-import LocomotiveScroll from "locomotive-scroll"
 
 const IndexPage = () => {
 
-  // useEffect(() => {
-  //   const scroller = new LocomotiveScroll({
-  //     el: document.querySelector('[data-scroll-container]'),
-  //     smooth: true
-  //   })
-  // }, [])
+
 
 
   return (
