@@ -226,3 +226,10 @@ pre tt:before,
 pre tt:after {
   content: none;
 }
+
+.line {
+	transform-origin: 0% 50%;
+	padding-bottom: 0.35rem;
+	white-space: nowrap;
+	will-change: transform;
+}

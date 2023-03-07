@@ -2,10 +2,12 @@ import React, {
   useRef,
   useEffect,
   forwardRef,
+  useState,
   Children,
   useLayoutEffect,
 } from "react"
 import { Container, GridItem, MiniGridItem } from "./styled"
+import { images } from './data'
 import gsap from "gsap"
 import SplitType from "split-type"
 import {
@@ -14,107 +16,6 @@ import {
   outTextLinesReveal,
 } from "../Effects/textLinesReveal"
 import { adjustedBoundingRect, calcWinsize } from "../../utils"
-const images = [
-  {
-    row: 1,
-    col: 1,
-    imgUrl: "https://tympanus.net/Development/GridZoom/1.04213a58.jpg",
-    content: {
-      title: 'Millions',
-      description: 'No matter how sophisticated, how cynical the public may become about publicity methods, it must respond to the basic appeals, because it will always need food, crave amusement, long for beauty, respond to leadership.'
-    }
-  },
-  {
-    row: 1,
-    col: 3,
-    imgUrl:
-      "https://images.unsplash.com/photo-1535579710123-3c0f261c474e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-      content: {
-        title: 'Millions',
-        description: 'This practice of creating circumstances and of creating pictures in the minds of millions of persons is very common.'
-      }
-  },
-  {
-    row: 1,
-    col: 4,
-    imgUrl:
-      "https://images.unsplash.com/photo-1586965529163-8c7d69503892?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80",
-      content: {
-        title: 'Millions',
-        description: 'This practice of creating circumstances and of creating pictures in the minds of millions of persons is very common.'
-      }
-  },
-  {
-    row: 2,
-    col: 1,
-    imgUrl:
-      "https://images.unsplash.com/photo-1607332897173-885f1b27e7a3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80",
-      content: {
-        title: 'Millions',
-        description: 'This practice of creating circumstances and of creating pictures in the minds of millions of persons is very common.'
-      }
-  },
-  {
-    row: 2,
-    col: 3,
-    imgUrl:
-      "https://images.unsplash.com/photo-1627735696625-d8f4b3f19821?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
-      content: {
-        title: 'Millions',
-        description: 'This practice of creating circumstances and of creating pictures in the minds of millions of persons is very common.'
-      }
-  },
-  {
-    row: 3,
-    col: 2,
-    imgUrl:
-      "https://images.unsplash.com/photo-1512324981942-bff898741db0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1076&q=80",
-      content: {
-        title: 'Millions',
-        description: 'This practice of creating circumstances and of creating pictures in the minds of millions of persons is very common.'
-      }
-  },
-  {
-    row: 3,
-    col: 4,
-    imgUrl:
-      "https://images.unsplash.com/photo-1462804993656-fac4ff489837?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
-      content: {
-        title: 'Millions',
-        description: 'This practice of creating circumstances and of creating pictures in the minds of millions of persons is very common.'
-      }
-  },
-  {
-    row: 4,
-    col: 1,
-    imgUrl:
-      "https://images.unsplash.com/photo-1513925407702-735e1f07e988?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
-    content: {
-      title: 'Millions',
-      description: 'This practice of creating circumstances and of creating pictures in the minds of millions of persons is very common.'
-    }
-  },
-  {
-    row: 4,
-    col: 3,
-    imgUrl:
-      "https://images.unsplash.com/photo-1608433112591-134fc0e5bd9d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
-      content: {
-        title: 'Millions',
-        description: 'This practice of creating circumstances and of creating pictures in the minds of millions of persons is very common.'
-      }
-  },
-  {
-    row: 5,
-    col: 2,
-    imgUrl:
-      "https://images.unsplash.com/photo-1529338030931-711fd750f02f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
-      content: {
-        title: 'Millions',
-        description: 'This practice of creating circumstances and of creating pictures in the minds of millions of persons is very common.'
-      }
-  },
-]
 
 const START = "start"
 const SHOW_CONTENT = "showContent"
@@ -162,6 +63,7 @@ const Home = () => {
   let miniGridImagesRef = useRef([])
   let bodyEl;
   
+  const [currentIndex, setCurrentIndex] = useState(0)
 
   useLayoutEffect(() => {
     init()
@@ -265,6 +167,7 @@ const Home = () => {
 
     currentRef.current = e.currentTarget
     let currentIndex = currentIndexRef.current = index
+    setCurrentIndex(currentIndex)
     showContent(imagesRef.current[currentIndex])
   }
 
@@ -273,6 +176,7 @@ const Home = () => {
     isGridView.current = false
     // currentIndexRef.current = index
     // currentRef.current = e.currentTarget
+    setCurrentIndex(index)
 
     changeContent(index)
   }
@@ -509,7 +413,8 @@ const Home = () => {
       )
   }
 
-  let currentIndex = currentIndexRef.current
+  // let currentIndex = currentIndexRef.current
+  let contentIndex = images[currentIndex].index
   let contentTitle = images[currentIndex]?.content?.title
   let contentDesc = images[currentIndex]?.content?.description
 
@@ -528,8 +433,10 @@ const Home = () => {
         />
       ))}
 
-      <div className="content font-semibold" ref={contentRef}>
-        <div className="title anim">{ contentTitle}</div>
+      <div className="content" ref={contentRef}>
+        <div className="title anim">
+          <span>{contentIndex}</span><span>{contentTitle}</span>
+          </div>
         <div className="description anim">
           { contentDesc }
         </div>
