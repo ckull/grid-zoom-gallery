@@ -21,7 +21,7 @@ const images = [
     imgUrl: "https://tympanus.net/Development/GridZoom/1.04213a58.jpg",
     content: {
       title: 'Millions',
-      description: 'This practice of creating circumstances and of creating pictures in the minds of millions of persons is very common.'
+      description: 'No matter how sophisticated, how cynical the public may become about publicity methods, it must respond to the basic appeals, because it will always need food, crave amusement, long for beauty, respond to leadership.'
     }
   },
   {
@@ -173,7 +173,7 @@ const Home = () => {
     if (typeof window !== `undefined`) { // or typeof document !== 'undefined'
       bodyEl = document?.querySelector('body')
     }
-    
+
     wrapTextLinesReveal(contentRef.current)
     window.addEventListener("resize", handleWinSize)
 
@@ -295,7 +295,7 @@ const Home = () => {
         isAnimating.current = false
       },
     }).addLabel(START, 0)
-    .add(outTextLinesReveal, START)
+    .add(outTextLinesReveal(contentRef.current), START)
     .to(currentImage, {
       opacity: 0,
       x: 0,
@@ -303,10 +303,10 @@ const Home = () => {
       scale: 0.8,
       onComplete: () => gsap.set(currentImage, {
         zIndex: 1
-      })
-    }).addLabel(SHOW_CONTENT, '>-=.4')
+      }, START)
+    }, START).addLabel(SHOW_CONTENT, '>-=0.4')
     .set(selectedImage, {
-      zIndex: 100
+      zIndex: 101
     }, START)
     .to(selectedImage, {
       scale: imageTransform.scale,
@@ -314,7 +314,8 @@ const Home = () => {
       y: imageTransform.y,
       opacity: 1,
     }, START)
-    .add(() => inTextLinesReveal, SHOW_CONTENT)
+  
+    .add(() => inTextLinesReveal(contentRef.current), SHOW_CONTENT)
   }
 
   const showContent = current => {
@@ -518,7 +519,7 @@ const Home = () => {
         <GridImage
           key={val.imgUrl + index}
           ref={el => (imagesRef.current[index] = el)}
-          onMouseOver={handleImageEnter}
+          onMouseEnter={handleImageEnter}
           onMouseLeave={handleImageLeave}
           onClick={e => handleImageClick(e, index)}
           row={val.row}
@@ -527,7 +528,7 @@ const Home = () => {
         />
       ))}
 
-      <div className="content" ref={contentRef}>
+      <div className="content font-semibold" ref={contentRef}>
         <div className="title anim">{ contentTitle}</div>
         <div className="description anim">
           { contentDesc }

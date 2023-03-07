@@ -21,6 +21,13 @@ export const Container = styled.div`
     overflow: hidden;
  }
 
+ .line {
+	transform-origin: 0% 50%;
+	padding-bottom: 0.35rem;
+	white-space: nowrap;
+	will-change: transform;
+}
+
  /* .content--open {
     visibility: visible;
  } */

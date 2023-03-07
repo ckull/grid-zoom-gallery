@@ -17,20 +17,18 @@ export const wrapTextLinesReveal = (elements) => {
 
 
 export const inTextLinesReveal = (elements) => {
-    console.log('content Ref: ', elements)
     const q = gsap.utils.selector(elements)
 
-    console.log('lines: ', q('.line'))
-    return gsap.timeline({
-        defaults: 1.2,
-        ease: 'expo'
-    }).set(q('.line'), {
+    return gsap.timeline({defaults: {duration: 1.2, ease: 'expo'}})
+    .set(q('.line'), {
         y: '150%',
-    }).to(q('.line'), {
+        rotate: 15
+    })
+    .to(q('.line'), {
         y: '0%',
         rotate: 0,
         stagger: 0.04
-    })
+    });
 }
 
 export const outTextLinesReveal = (elements) => {
@@ -38,11 +36,11 @@ export const outTextLinesReveal = (elements) => {
     const q = gsap.utils.selector(elements)
 
     return gsap.timeline({
-        defaults: 1,
+        defaults: .5,
         ease: 'expo.in'
     }).to(q('.line'), {
         y: '-150%',
-        // rotate: -5,
+        rotate: -2,
         stagger: 0.02
     })
 }
