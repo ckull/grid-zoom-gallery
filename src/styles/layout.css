@@ -35,7 +35,12 @@ html {
   font: sans-serif;
   font-size: var(--font-md);
   line-height: var(--line-height-normal);
+  scroll-behavior: initial;
   /* overflow-y: scroll; */
+}
+html,body {
+  min-height: 100%;
+  height: auto;
 }
 body {
   -moz-osx-font-smoothing: grayscale;

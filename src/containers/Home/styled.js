@@ -1,6 +1,7 @@
 import styled from "styled-components"
 
 export const Container = styled.div`
+   background-color: #FDFDF5;
  .title {
     font-weight: bold;
     font-size: 3rem;

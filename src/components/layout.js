@@ -7,7 +7,7 @@
 
 import * as React from "react"
 import { useStaticQuery, graphql } from "gatsby"
-
+import { ReactLenis } from "@studio-freight/react-lenis"
 import Header from "./header"
 import "src/styles/layout.css"
 
@@ -22,13 +22,22 @@ const Layout = ({ children }) => {
     }
   `)
 
+  const options = {
+    duration: 1.2,
+    easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // https://www.desmos.com/calculator/brs54l4xou
+    direction: "vertical", // vertical, horizontal
+    gestureDirection: "vertical", // vertical, horizontal, both
+    smooth: true,
+    mouseMultiplier: 1,
+    smoothTouch: false,
+    touchMultiplier: 2,
+    infinite: false,
+  }
+
   return (
-    <>
-     
-        <main data-scroll-container>{children}</main>
-       
-      
-    </>
+    <ReactLenis root options={{ options }}>
+      <main data-scroll-container>{children}</main>
+    </ReactLenis>
   )
 }
 

@@ -15,8 +15,8 @@ import {
   inTextLinesReveal,
   outTextLinesReveal,
 } from "../Effects/textLinesReveal"
-import { adjustedBoundingRect, calcWinsize } from "../../utils"
-
+import { adjustedBoundingRect, calcWinsize } from "src/utils"
+import { useLenis } from "@studio-freight/react-lenis"
 const START = "start"
 const SHOW_CONTENT = "showContent"
 const SHOW_GRID = "showGrid"
@@ -62,6 +62,7 @@ const Home = () => {
   let miniGridRef = useRef()
   let miniGridImagesRef = useRef([])
   let bodyEl;
+  const lenis = useLenis()
   
   const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -77,12 +78,29 @@ const Home = () => {
     }
 
     wrapTextLinesReveal(contentRef.current)
-    window.addEventListener("resize", handleWinSize)
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener("resize", handleWinSize)
+      window.removeEventListener("resize", handleResize)
     }
   }, [])
+  const handleResize = () => {
+    handleWinSize()
+
+    if (!isGridView.current ) {
+      handleImageTransform()
+    }
+  }
+
+  const handleImageTransform = () => {
+    const imageTransform = calcTransformImage(imagesRef.current[currentIndex]);
+    gsap.set(imagesRef.current[currentIndex], {
+        scale: imageTransform.scale,
+        x: imageTransform.x,
+        y: imageTransform.y
+    });
+
+  }
 
   const init = () => {
     gsap.set(
@@ -103,7 +121,6 @@ const Home = () => {
     }
 
     let q = gsap.utils.selector(e.currentTarget)
-
     gsap
       .timeline({
         defaults: { duration: 1.2, ease: "expo" },
@@ -167,6 +184,8 @@ const Home = () => {
 
     currentRef.current = e.currentTarget
     let currentIndex = currentIndexRef.current = index
+    lenis?.stop()
+
     setCurrentIndex(currentIndex)
     showContent(imagesRef.current[currentIndex])
   }
@@ -248,7 +267,7 @@ const Home = () => {
         },
         START
       )
-      .set(bodyEl, {
+      .set(document.querySelector('body'), {
         overflow: 'hidden'
       })
 
@@ -325,6 +344,9 @@ const Home = () => {
     if (isAnimating.current) {
       return false
     }
+
+    console.log('lenis: ' ,lenis)
+    lenis?.start()
     isAnimating.current = true
     isGridView.current = true
     let currentIndex = currentIndexRef.current
@@ -355,9 +377,9 @@ const Home = () => {
       .add(() => {
         outTextLinesReveal(contentRef.current)
       }, START)
-      .set(bodyEl, {
+      .set(document.querySelector('body'), {
         overflow: 'auto'
-      })
+      }, START)
       .to(
         backBtnRef.current,
         {
@@ -447,7 +469,7 @@ const Home = () => {
         >
           <span>back</span>
         </button>
-        <div className="w-[220px] h-[190px]">
+        <div className="invisible md:visible w-[220px] h-[190px]">
           <MiniGrid ref={miniGridRef}>
             {images.map((val, index) => (
               <MiniGridImage
